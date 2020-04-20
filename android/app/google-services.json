@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "624896648586",
+    "firebase_url": "https://academic-buddy.firebaseio.com",
+    "project_id": "academic-buddy",
+    "storage_bucket": "academic-buddy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624896648586:android:f116920b7ed710bc465473",
+        "android_client_info": {
+          "package_name": "ikjotsd.academicbuddy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "624896648586-osl41qcnd3f9fqhl235f4b2dbhpbv0hp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ikjotsd.academicbuddy",
+            "certificate_hash": "c941d3fe327922055500058c73f342aa96fc21aa"
+          }
+        },
+        {
+          "client_id": "624896648586-nvtd5n9toqcm65ka4higqsobftp8srla.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKWy_Xr5qqIjlEJyxxEXkrU01vHorEHPc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "624896648586-nvtd5n9toqcm65ka4higqsobftp8srla.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
