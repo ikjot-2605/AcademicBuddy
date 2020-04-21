@@ -14,13 +14,27 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.white,
+        color: Colors.transparent,
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              FlutterLogo(size: 150),
+              SizedBox(
+                height: 100.0,
+                child: Text(
+                    'Your Academic Buddy',
+                    style: TextStyle(
+                      fontSize: 40.0,
+                      fontFamily: 'Pacifico',
+                      color: Colors.grey[500],
+                    ),
+                ),
+              ),
+              SizedBox(
+                height:150.0,
+                child:Image(image: AssetImage('images/logo.png'),),
+              ),
               SizedBox(height: 50),
               _signInButton(),
             ],
@@ -53,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image(image: AssetImage("images/google.gif"), height: 35.0),
+            Image(image: AssetImage("images/g.png"), height: 35.0),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(

@@ -2,35 +2,51 @@ import 'package:flutter/material.dart';
 import 'package:academicbuddy/login_page.dart';
 import 'package:academicbuddy/sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'nav_drawer.dart';
 class FirstScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: StreamBuilder<QuerySnapshot>(
-          stream: Firestore.instance.collection('users')
-              .snapshots(),
-          builder: (BuildContext context,
-              AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError)
-              return new Text('Error: ${snapshot.error}');
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return new Text('Loading...');
-              default:
-                return new ListView(
-                  children: snapshot.data.documents
-                      .map((DocumentSnapshot document) {
-                    return Container(
-
-                    );
-
-                  }).toList(),
-                );
-            }
-          },
-        )),
-
+    Future<QuerySnapshot> docRef = Firestore.instance
+        .collection("users")
+        .where("id", isEqualTo: id)
+        .getDocuments();
+    String greeting = 'Welcome $name';
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.grey,
+        primaryColor: Colors.black,
+        brightness: Brightness.dark,
+        backgroundColor: Color(0xFF000000),
+        accentColor: Colors.white,
+        accentIconTheme: IconThemeData(color: Colors.black),
+        dividerColor: Colors.black54,
+      ),
+      home: Scaffold(
+        drawer: NavDrawer(),
+        appBar: AppBar(backgroundColor: Colors.grey[900], actions: <Widget>[
+          // action button
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('Welcome $name'),
+              IconButton(
+                icon: Icon(Icons.exit_to_app),
+                onPressed: (){
+                  signOutGoogle();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return LoginPage();
+                      },
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ]),
+      ),
     );
   }
 }

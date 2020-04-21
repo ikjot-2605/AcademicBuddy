@@ -3,7 +3,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
-
+int newUser=0;
 String name;
 String email;
 String imageUrl;
@@ -20,7 +20,7 @@ Future<String> signInWithGoogle() async {
 
   final AuthResult authResult = await _auth.signInWithCredential(credential);
   final FirebaseUser user = authResult.user;
-  id=user.uid;
+
   // Checking if email and name is null
   assert(user.email != null);
   assert(user.displayName != null);
@@ -29,7 +29,11 @@ Future<String> signInWithGoogle() async {
   name = user.displayName;
   email = user.email;
   imageUrl = user.photoUrl;
-
+  id=user.uid;
+  AuthResult authResult1 = await _auth.signInWithCredential(credential);
+  if (authResult1.additionalUserInfo.isNewUser) {
+    newUser=1;
+  }
   // Only taking the first part of the name, i.e., First Name
   if (name.contains(" ")) {
     name = name.substring(0, name.indexOf(" "));
