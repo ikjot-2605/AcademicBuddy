@@ -1,54 +1,46 @@
+import 'package:academicbuddy/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'branch_year.dart';
+final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FirebaseAuth _auth = FirebaseAuth.instance;
-final GoogleSignIn googleSignIn = GoogleSignIn();
-int newUser=0;
+int newUser = 0;
 String name;
 String email;
 String imageUrl;
 String id;
-Future<String> signInWithGoogle() async {
-  final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-  final GoogleSignInAuthentication googleSignInAuthentication =
-  await googleSignInAccount.authentication;
+Future<FirebaseUser> signInWithGoogle() async {
+  try {
+    GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+    GoogleSignInAuthentication gSA = await googleSignInAccount.authentication;
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: gSA.accessToken,
+      idToken: gSA.idToken,
+    );
+    AuthResult authResult = await _auth.signInWithCredential(credential);
+    final FirebaseUser user = authResult.user;
 
-  final AuthCredential credential = GoogleAuthProvider.getCredential(
-    accessToken: googleSignInAuthentication.accessToken,
-    idToken: googleSignInAuthentication.idToken,
-  );
+    // Checking if email and name is null
+    assert(user.email != null);
+    assert(user.displayName != null);
+    assert(user.photoUrl != null);
 
-  final AuthResult authResult = await _auth.signInWithCredential(credential);
-  final FirebaseUser user = authResult.user;
+    name = user.displayName.split(" ")[0];
+    email = user.email;
+    imageUrl = user.photoUrl;
+    id=user.uid;
 
-  // Checking if email and name is null
-  assert(user.email != null);
-  assert(user.displayName != null);
-  assert(user.photoUrl != null);
 
-  name = user.displayName;
-  email = user.email;
-  imageUrl = user.photoUrl;
-  id=user.uid;
-  AuthResult authResult1 = await _auth.signInWithCredential(credential);
-  if (authResult1.additionalUserInfo.isNewUser) {
-    newUser=1;
+
   }
-  // Only taking the first part of the name, i.e., First Name
-  if (name.contains(" ")) {
-    name = name.substring(0, name.indexOf(" "));
+  catch (e) {
+    print(e.message);
   }
-
-  assert(!user.isAnonymous);
-  assert(await user.getIdToken() != null);
-
-  final FirebaseUser currentUser = await _auth.currentUser();
-  assert(user.uid == currentUser.uid);
-  return 'signInWithGoogle succeeded: $user';
 }
 
 void signOutGoogle() async {
-  await googleSignIn.signOut();
-
+  await _googleSignIn.signOut();
+  flag=0;
   print("User Sign Out");
 }

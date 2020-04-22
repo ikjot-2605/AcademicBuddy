@@ -6,11 +6,8 @@ import 'nav_drawer.dart';
 class FirstScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Future<QuerySnapshot> docRef = Firestore.instance
-        .collection("users")
-        .where("id", isEqualTo: id)
-        .getDocuments();
     String greeting = 'Welcome $name';
+    print(newUser);
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.grey,
