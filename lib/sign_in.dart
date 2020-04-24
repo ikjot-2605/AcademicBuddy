@@ -19,6 +19,12 @@ Future<FirebaseUser> signInWithGoogle() async {
       idToken: gSA.idToken,
     );
     AuthResult authResult = await _auth.signInWithCredential(credential);
+    if (authResult.additionalUserInfo.isNewUser) {
+      print('firsttime');
+    }
+    else{
+      print('multipletimes');
+    }
     final FirebaseUser user = authResult.user;
 
     // Checking if email and name is null

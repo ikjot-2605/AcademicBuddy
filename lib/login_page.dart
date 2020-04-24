@@ -5,37 +5,9 @@ import 'package:academicbuddy/first_screen.dart';
 import 'first_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/scheduler.dart';
-int flag = 1;
-
-class LoginPage extends StatefulWidget {
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder(
-        stream: Firestore.instance.collection('users').snapshots(),
-        builder: (context, snapshot) {
-          List list = snapshot.data.documents;
-          int flag=0;
-          for(int i=0;i<list.length;i++){
-            print(list[i]['id']);
-            if(list[i]['id']==id){
-              flag=1;
-              return old();
-            }
-          }
-          if(flag==0){
-            return FirstTime();
-          }
-        },
-      ),
-    );
-  }
-}
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+int flag = 0;
 
 class FirstTime extends StatefulWidget {
   @override
@@ -85,15 +57,13 @@ class _FirstTimeState extends State<FirstTime> {
       splashColor: Colors.grey,
       onPressed: () {
         signInWithGoogle().whenComplete(() {
-
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return BranchYear();
-                },
-              ),
-            );
-
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return BranchYear();
+              },
+            ),
+          );
         });
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
@@ -172,14 +142,13 @@ class _oldState extends State<old> {
       onPressed: () {
         signInWithGoogle().whenComplete(() {
           print(flag);
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return FirstScreen();
-                },
-              ),
-            );
-
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return FirstScreen();
+              },
+            ),
+          );
         });
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
@@ -204,6 +173,36 @@ class _oldState extends State<old> {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  @override
+  Future getCurrentUser() async {
+    FirebaseUser _user = await FirebaseAuth.instance.currentUser();
+    print("User: ${_user.displayName ?? "None"}");
+    return _user;}
+  Widget build(BuildContext context) {
+    flag=0;
+    signInWithGoogle();
+    Widget a = Container();
+    return Scaffold(
+      body: StreamBuilder(
+        stream: Firestore.instance.collection('users').snapshots(),
+        builder: (context, snapshot) {
+          List list = snapshot.data.documents;
+          for(int i=0;i<list.length;i++){
+            if(list[i]["id"]==id){
+              flag=1;
+              return FirstTime();
+            }
+          }
+          if (flag==0){
+            return FirstTime();
+          }
+        },
       ),
     );
   }

@@ -2,7 +2,7 @@ import 'package:academicbuddy/first_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'sign_in.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 class BranchYear extends StatefulWidget {
   @override
   _BranchYearState createState() => _BranchYearState();
@@ -16,6 +16,10 @@ List<int> year = [
 ];
 String BranchSelected='';
 int YearSelected=0;
+void pushToSP() async{
+  SharedPreferences myPrefs = await SharedPreferences.getInstance();
+  myPrefs.setString(id, id);
+}
 class _BranchYearState extends State<BranchYear> {
   @override
   Widget build(BuildContext context) {
@@ -130,6 +134,7 @@ class _YearState extends State<Year> {
                             YearSelected=year[index];
                           });
                           Firestore.instance.collection('users').document(id).setData({'name':name,'email':email,'branch':BranchSelected,'year':YearSelected,'id':id});
+                          pushToSP();
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) {
