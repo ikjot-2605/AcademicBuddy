@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'assignments.dart';
 class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,15 @@ class NavDrawer extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.assignment),
               title: Text('View Upcoming Assignments'),
-              onTap: () => {},
+              onTap: () => {
+              Navigator.of(context).push(
+              MaterialPageRoute(
+              builder: (context) {
+              return Assignment();
+              },
+              ),
+              ),
+              },
             ),
             ListTile(
               leading: Icon(Icons.book),

@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'branch_year.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
+import 'first_screen.dart';
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FirebaseAuth _auth = FirebaseAuth.instance;
 int newUser = 0;
@@ -10,7 +13,7 @@ String name;
 String email;
 String imageUrl;
 String id;
-Future<FirebaseUser> signInWithGoogle() async {
+Future<FirebaseUser> signInWithGoogle(BuildContext context) async {
   try {
     GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
     GoogleSignInAuthentication gSA = await googleSignInAccount.authentication;
@@ -20,10 +23,22 @@ Future<FirebaseUser> signInWithGoogle() async {
     );
     AuthResult authResult = await _auth.signInWithCredential(credential);
     if (authResult.additionalUserInfo.isNewUser) {
-      print('firsttime');
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            return BranchYear();
+          },
+        ),
+      );
     }
     else{
-      print('multipletimes');
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            return FirstScreen();
+          },
+        ),
+      );
     }
     final FirebaseUser user = authResult.user;
 
@@ -36,8 +51,9 @@ Future<FirebaseUser> signInWithGoogle() async {
     email = user.email;
     imageUrl = user.photoUrl;
     id=user.uid;
+    Map<String,String> data=new Map();
 
-
+    SharedPreferences.setMockInitialValues(data);
 
   }
   catch (e) {
