@@ -67,37 +67,6 @@ class ListAssignment extends StatefulWidget {
 }
 
 class _ListAssignmentState extends State<ListAssignment> {
-  Future<String> getStringValuesSF() async {
-    final prefs = await SharedPreferences.getInstance();
-    print(id);
-    final stringValue = await prefs.getString(id);
-    print(stringValue);
-    final ikjotString = await prefs.getString('8dNzZ4RsQwXOVgmxVKUtqsrkUNz2');
-    print('Ikjot data $ikjotString');
-    setState(() {
-      identified = stringValue;
-    });
-    return stringValue ?? '';
-  }
-
-  void initState() {
-    print('Inside initState');
-    super.initState();
-    getStringValuesSF().then((value) {
-      identified = value;
-      print(identified);
-    }).whenComplete(() {
-      print('.whenComplete done');
-      for (int i = 0; i < assignments.length; i++) {
-        print('identified=$identified');
-        print('from db $assignments)');
-        if (assignments[i]['branch'] + assignments[i]['year'].toString() !=
-            identified) {
-          assignments.removeAt(i);
-        }
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,22 +94,7 @@ class _ListAssignmentState extends State<ListAssignment> {
                 style: TextStyle(fontSize: 15.0),
               ),
               centerTitle: true,
-              actions: <Widget>[
-                // action button
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.backspace),
-                      onPressed: () {
-                        signOutGoogle();
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-              ]),
+              ),
           body: ListView.builder(
               itemCount: assignments.length,
               itemBuilder: (context, idx) {
