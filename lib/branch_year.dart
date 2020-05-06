@@ -96,7 +96,8 @@ class Year extends StatefulWidget {
 class _YearState extends State<Year> {
   Future<String> getStringValuesSF() async {
     final prefs = await SharedPreferences.getInstance();
-    final stringValue = await prefs.getString('stringValue');
+    final stringValue = await prefs.getString(id);
+    print('upload of the branch year string complete as shown $stringValue');
     return stringValue??'';
   }
   Future<void> _incrementStartup(String todo) async{

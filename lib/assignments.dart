@@ -4,7 +4,8 @@ import 'sign_in.dart';
 import 'branch_year.dart';
 import 'first_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-String identified='';
+
+String identified = '';
 /*Future<String> getBranchName() async {
   DocumentSnapshot snapshot= await Firestore.instance.collection('users').document(id).get();
   var channelName = snapshot['branch'];
@@ -14,7 +15,6 @@ String identified='';
 }*/
 var databaseReference = Firestore.instance;
 List assignments = new List();
-
 
 class Assignment extends StatefulWidget {
   @override
@@ -26,17 +26,19 @@ class _AssignmentState extends State<Assignment> {
     final prefs = await SharedPreferences.getInstance();
     final stringValue = await prefs.getString('stringValue');
     setState(() {
-      identified=stringValue;
+      identified = stringValue;
     });
-    return stringValue??'';
+    return stringValue ?? '';
   }
-  Future<void> _incrementStartup(String todo) async{
+
+  Future<void> _incrementStartup(String todo) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(id, todo);
     setState(() {
-      identify=todo;
+      identify = todo;
     });
   }
+
   @override
   int index = 0;
   Widget build(BuildContext context) {
@@ -58,6 +60,7 @@ class _AssignmentState extends State<Assignment> {
     );
   }
 }
+
 class ListAssignment extends StatefulWidget {
   @override
   _ListAssignmentState createState() => _ListAssignmentState();
@@ -66,20 +69,36 @@ class ListAssignment extends StatefulWidget {
 class _ListAssignmentState extends State<ListAssignment> {
   Future<String> getStringValuesSF() async {
     final prefs = await SharedPreferences.getInstance();
-    final stringValue = await prefs.getString('stringValue');
-    final ikjotString=await prefs.getString('8dNzZ4RsQwXOVgmxVKUtqsrkUNz2');
+    print(id);
+    final stringValue = await prefs.getString(id);
+    print(stringValue);
+    final ikjotString = await prefs.getString('8dNzZ4RsQwXOVgmxVKUtqsrkUNz2');
     print('Ikjot data $ikjotString');
     setState(() {
-      identified=stringValue;
+      identified = stringValue;
     });
-    return stringValue??'';
+    return stringValue ?? '';
   }
+
   void initState() {
+    print('Inside initState');
     super.initState();
-    getStringValuesSF().then((value){
-      identified=value;
-    }).whenComplete((){print('Async done');});
+    getStringValuesSF().then((value) {
+      identified = value;
+      print(identified);
+    }).whenComplete(() {
+      print('.whenComplete done');
+      for (int i = 0; i < assignments.length; i++) {
+        print('identified=$identified');
+        print('from db $assignments)');
+        if (assignments[i]['branch'] + assignments[i]['year'].toString() !=
+            identified) {
+          assignments.removeAt(i);
+        }
+      }
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     /*BranchSelected=getBranchName().then((branch)
@@ -88,12 +107,6 @@ class _ListAssignmentState extends State<ListAssignment> {
     */
 
     print(BranchSelected);
-    for (int i = 0; i < assignments.length; i++) {
-      print('identified=$identified');
-      if (assignments[i]['branch']+assignments[i]['year'].toString() != identified) {
-        assignments.removeAt(i);
-      }
-    }
     return MaterialApp(
         theme: ThemeData(
           primarySwatch: Colors.grey,
@@ -170,5 +183,3 @@ class _ListAssignmentState extends State<ListAssignment> {
         ));
   }
 }
-
-
